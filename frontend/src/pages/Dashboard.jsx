@@ -1,56 +1,28 @@
-import React, { useState, useEffect } from "react";
-import eventsData from "../data/events";
-import { Link } from "react-router-dom";
-
-function getStoredEvents() {
-  const stored = localStorage.getItem("events");
-  return stored ? JSON.parse(stored) : eventsData;
-}
-
-function saveEvents(events) {
-  localStorage.setItem("events", JSON.stringify(events));
-}
+import React from "react";
 
 const Dashboard = () => {
-  const [events, setEvents] = useState(getStoredEvents());
-
-  useEffect(() => {
-    setEvents(getStoredEvents());
-  }, []);
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      const updated = events.filter(event => event.id !== id);
-      setEvents(updated);
-      saveEvents(updated);
-    }
-  };
+  const user = JSON.parse(localStorage.getItem('user'));
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100">
-      <h1 className="text-3xl font-bold text-blue-700 mb-8 text-center">Your Events</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {events.length > 0 ? (
-          events.map(event => (
-            <div key={event.id} style={{ perspective: '1000px' }} className="group h-full">
-              <div className="bg-white rounded-2xl shadow-xl shadow-blue-200/40 p-6 flex flex-col h-full overflow-hidden transform-gpu group-hover:scale-105 group-hover:shadow-2xl group-hover:-rotate-y-2 transition-all duration-500">
-                <img src={event.imageUrl} alt={event.title} className="w-full h-40 object-cover rounded-lg mb-4 shadow-lg border border-blue-100" />
-                <h2 className="text-xl font-bold text-blue-700 mb-1 line-clamp-1">{event.title}</h2>
-                <div className="text-sm text-gray-500 mb-2">{event.date} • {event.location}</div>
-                <p className="text-gray-700 mb-4 line-clamp-2 flex-1">{event.description}</p>
-                <div className="flex space-x-2 mt-auto">
-                  <Link to={`/events/${event.id}`} className="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg font-semibold shadow border-b-4 border-blue-800 hover:from-blue-700 hover:to-blue-600 hover:border-blue-700 transition-all duration-200 transform-gpu active:scale-95 active:border-b-2">View</Link>
-                  <Link to={`/create?edit=${event.id}`} className="px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-300 text-blue-900 rounded-lg font-semibold shadow border-b-4 border-yellow-600 hover:from-yellow-500 hover:to-yellow-400 hover:border-yellow-700 transition-all duration-200 transform-gpu active:scale-95 active:border-b-2">Edit</Link>
-                  <Link to={`/registrations/${event.id}`} className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-400 text-white rounded-lg font-semibold shadow border-b-4 border-green-700 hover:from-green-600 hover:to-green-500 hover:border-green-800 transition-all duration-200 transform-gpu active:scale-95 active:border-b-2">Registrations</Link>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="col-span-full text-center text-gray-500 py-12">You have not created any events yet.</div>
+    <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 px-4 py-12">
+      <div className="w-full max-w-2xl bg-white bg-opacity-90 rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col items-center text-center">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">Welcome, {user.name}!</h1>
+        <p className="text-lg text-gray-600 mb-6">You are logged in as <span className="font-semibold text-blue-600">{user.role}</span>.</p>
+        {user && (
+          <div className="mb-4">
+            <p className="font-semibold">Email: <span className="font-normal">{user.email}</span></p>
+          </div>
         )}
+        <div className="w-full flex flex-col md:flex-row gap-6 justify-center">
+          <div className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
+            <span className="text-4xl mb-2">📅</span>
+            <h2 className="text-xl font-bold mb-1">Your Events</h2>
+            <p className="text-lg">0 events</p>
+            <p className="text-sm mt-2">(Connect to backend to show real data)</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

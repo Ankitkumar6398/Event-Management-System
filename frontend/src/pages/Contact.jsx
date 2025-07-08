@@ -2,127 +2,45 @@ import React, { useState } from "react";
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Name is required.";
-    if (!form.email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
-      newErrors.email = "Invalid email address.";
-    }
-    if (!form.message.trim()) newErrors.message = "Message is required.";
-    return newErrors;
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: undefined });
-  };
-
-  const handleSubmit = (e) => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = e => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setSubmitted(true);
-    setForm({ name: "", email: "", message: "" });
+    setSent(true);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 py-8 px-2 sm:px-4">
-      <div className="w-full max-w-2xl mx-auto">
-        <div className="relative rounded-3xl shadow-2xl bg-white/30 backdrop-blur-lg border border-white/40 p-8 sm:p-12 flex flex-col items-center glass-card animate-fade-in" style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)', border: '1px solid rgba(255,255,255,0.18)'}}>
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-24 h-24 bg-gradient-to-tr from-blue-400 via-purple-400 to-pink-400 rounded-full blur-2xl opacity-60 z-0 animate-pulse" />
-          <h1 className="relative z-10 text-4xl sm:text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 drop-shadow-lg text-center">Contact Us</h1>
-          <p className="relative z-10 text-lg text-gray-700 mb-8 text-center max-w-md">We'd love to hear from you! Fill out the form below and our team will get back to you soon.</p>
-          {submitted && (
-            <div className="relative z-10 mb-4 p-3 bg-green-100/80 text-green-700 rounded shadow animate-bounce-in">
-              Thank you for contacting us! We'll get back to you soon.
-            </div>
-          )}
-          <form onSubmit={handleSubmit} className="relative z-10 w-full space-y-6">
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold text-gray-800" htmlFor="name">Name</label>
-              <input
-                className={`transition-all duration-200 w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/70 shadow-inner text-gray-900 placeholder-gray-400 ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:scale-105`}
-                type="text"
-                id="name"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                autoComplete="off"
-                placeholder="Your Name"
-              />
-              {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold text-gray-800" htmlFor="email">Email</label>
-              <input
-                className={`transition-all duration-200 w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-purple-400 bg-white/70 shadow-inner text-gray-900 placeholder-gray-400 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:scale-105`}
-                type="email"
-                id="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                autoComplete="off"
-                placeholder="you@email.com"
-              />
-              {errors.email && <div className="text-red-500 text-sm mt-1">{errors.email}</div>}
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-semibold text-gray-800" htmlFor="message">Message</label>
-              <textarea
-                className={`transition-all duration-200 w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/70 shadow-inner text-gray-900 placeholder-gray-400 ${errors.message ? 'border-red-500' : 'border-gray-300'} focus:scale-105`}
-                id="message"
-                name="message"
-                rows={5}
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Type your message here..."
-              />
-              {errors.message && <div className="text-red-500 text-sm mt-1">{errors.message}</div>}
-            </div>
-            <button
-              type="submit"
-              className="w-full py-3 mt-2 rounded-xl font-bold text-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg hover:scale-105 hover:shadow-2xl transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-300"
-            >
-              Send Message
-            </button>
+    <section className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">Contact Us</h1>
+        <p className="text-gray-600 mb-6">Have a question or want to get in touch? Fill out the form below or reach us at <a href="mailto:info@eventease.com" className="text-blue-600 underline">info@eventease.com</a>.</p>
+        <div className="grid md:grid-cols-2 gap-8">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input type="text" name="name" value={form.name} onChange={handleChange} required placeholder="Your Name" className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input type="email" name="email" value={form.email} onChange={handleChange} required placeholder="Your Email" className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <textarea name="message" value={form.message} onChange={handleChange} required placeholder="Your Message" rows={4} className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-purple-600 transition">Send Message</button>
+            {sent && <div className="text-green-600 mt-2">Thank you! Your message has been sent.</div>}
           </form>
+          <div className="flex flex-col gap-4 justify-center">
+            <div>
+              <h2 className="font-semibold text-gray-700 mb-1">Contact Info</h2>
+              <p className="text-gray-600 text-sm">Email: info@eventease.com</p>
+              <p className="text-gray-600 text-sm">Phone: +91-9876543210</p>
+            </div>
+            <div>
+              <h2 className="font-semibold text-gray-700 mb-1">Follow Us</h2>
+              <div className="flex gap-3">
+                <a href="#" className="text-blue-600 hover:text-blue-800 text-xl">🐦</a>
+                <a href="#" className="text-blue-600 hover:text-blue-800 text-xl">📘</a>
+                <a href="#" className="text-blue-600 hover:text-blue-800 text-xl">📸</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <style>{`
-        .glass-card {
-          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-          border: 1px solid rgba(255,255,255,0.18);
-        }
-        @media (max-width: 640px) {
-          .glass-card {
-            padding: 1.5rem !important;
-          }
-        }
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(40px) scale(0.98); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.8s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        @keyframes bounce-in {
-          0% { transform: scale(0.8); opacity: 0; }
-          60% { transform: scale(1.05); opacity: 1; }
-          100% { transform: scale(1); }
-        }
-        .animate-bounce-in {
-          animation: bounce-in 0.5s cubic-bezier(0.4,0,0.2,1) both;
-        }
-      `}</style>
-    </div>
+    </section>
   );
 };
 

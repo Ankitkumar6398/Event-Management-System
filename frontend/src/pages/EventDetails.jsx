@@ -1,74 +1,119 @@
-import React, { useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import events from "../data/events";
-import EventCard from "../components/EventCard";
-import Comments from "../components/Comments";
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+
+const demoEvents = [
+  {
+    id: 1,
+    name: "Music Fest 2024",
+    date: "2024-07-15",
+    location: "Mumbai",
+    price: 499,
+    category: "Music",
+    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+    description: "Join us for an unforgettable night of music, fun, and celebration at Music Fest 2024!",
+    schedule: [
+      { time: "6:00 PM", activity: "Gates Open" },
+      { time: "7:00 PM", activity: "Opening Act" },
+      { time: "8:00 PM", activity: "Main Performance" },
+      { time: "10:00 PM", activity: "After Party" }
+    ],
+    speakers: ["DJ Arjun", "Band FusionX"],
+    tickets: [
+      { type: "VIP", price: 999, perks: "Front row, Free drinks" },
+      { type: "General", price: 499, perks: "Entry only" }
+    ]
+  },
+  {
+    id: 2,
+    name: "Startup Expo",
+    date: "2024-08-10",
+    location: "Bangalore",
+    price: 299,
+    category: "Corporate",
+    image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80",
+    description: "Network with top startups and investors at the Startup Expo!",
+    schedule: [
+      { time: "10:00 AM", activity: "Registration" },
+      { time: "11:00 AM", activity: "Keynote" },
+      { time: "1:00 PM", activity: "Panel Discussion" },
+      { time: "3:00 PM", activity: "Networking" }
+    ],
+    speakers: ["Riya Mehta", "Sanjay Kapoor"],
+    tickets: [
+      { type: "VIP", price: 599, perks: "Front seats, Lunch included" },
+      { type: "General", price: 299, perks: "Entry only" }
+    ]
+  },
+  // ...add more events as needed
+];
 
 const EventDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const event = events.find(e => e.id === Number(id));
-  const [copied, setCopied] = useState(false);
+  const event = demoEvents.find(e => e.id === Number(id));
+  const related = demoEvents.filter(e => e.id !== Number(id)).slice(0, 2);
 
-  if (!event) {
-    return (
-      <div className="max-w-2xl mx-auto py-20 text-center">
-        <h2 className="text-2xl font-bold text-red-600 mb-4">Event not found</h2>
-        <Link to="/events" className="text-blue-600 hover:underline">Back to Events</Link>
-      </div>
-    );
-  }
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const relatedEvents = events
-    .filter(e => e.type === event.type && e.id !== event.id)
-    .slice(0, 3);
+  if (!event) return <div className="text-center py-20 text-gray-500">Event not found.</div>;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 bg-gradient-to-b from-blue-50 via-white to-blue-100 min-h-screen">
-      <button onClick={() => navigate(-1)} className="mb-6 text-blue-600 hover:underline">← Back</button>
-      <div className="bg-white rounded-3xl shadow-2xl shadow-blue-200/40 overflow-hidden flex flex-col md:flex-row transform-gpu hover:scale-105 hover:-rotate-y-2 transition-all duration-500">
-        <img src={event.imageUrl} alt={event.title} className="w-full md:w-1/2 h-64 md:h-auto object-cover object-center rounded-xl shadow-lg border border-blue-100" />
-        <div className="p-8 flex-1 flex flex-col">
-          <h1 className="text-3xl font-extrabold text-blue-700 mb-2">{event.title}</h1>
-          <div className="flex flex-wrap items-center text-gray-500 mb-4 space-x-4">
-            <span>📅 {event.date}</span>
-            <span>⏰ {event.time}</span>
-            <span>📍 {event.location}</span>
+    <section className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+        <div className="flex flex-col md:flex-row gap-8">
+          <img src={event.image} alt={event.name} className="w-full md:w-1/2 h-64 object-cover rounded-2xl shadow" />
+          <div className="flex-1 flex flex-col justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800 mb-2">{event.name}</h1>
+              <p className="text-gray-600 mb-1">📅 {event.date}</p>
+              <p className="text-gray-600 mb-1">📍 {event.location}</p>
+              <p className="text-gray-700 mb-4">{event.description}</p>
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold text-gray-700 mb-2">Schedule</h2>
+                <ul className="list-disc list-inside text-gray-600">
+                  {event.schedule.map((item, idx) => (
+                    <li key={idx}><span className="font-semibold">{item.time}:</span> {item.activity}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold text-gray-700 mb-2">Speakers/Performers</h2>
+                <ul className="flex flex-wrap gap-2">
+                  {event.speakers.map((s, idx) => (
+                    <li key={idx} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">{s}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold text-gray-700 mb-2">Tickets</h2>
+                <div className="flex flex-col gap-3">
+                  {event.tickets.map((t, idx) => (
+                    <div key={idx} className="flex items-center justify-between bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg px-4 py-2">
+                      <span className="font-bold text-gray-800">{t.type}</span>
+                      <span className="text-gray-700">₹{t.price}</span>
+                      <span className="text-gray-500 text-sm">{t.perks}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
           </div>
-          <p className="text-lg text-gray-700 mb-6">{event.description}</p>
-          {/* Speakers/hosts could go here if available */}
-          <div className="flex items-center space-x-2 mt-auto">
-            <button onClick={handleCopyLink} className="px-6 py-3 bg-gradient-to-r from-gray-200 to-gray-100 text-gray-700 font-semibold rounded-lg shadow border-b-4 border-gray-400 hover:from-gray-300 hover:to-gray-200 hover:border-gray-500 transition-all duration-200 transform-gpu active:scale-95 active:border-b-2">
-              {copied ? "Copied!" : "Share"}
-            </button>
-            <Link to={`/register/${event.id}`} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold rounded-lg shadow border-b-4 border-blue-800 hover:from-blue-700 hover:to-blue-600 hover:border-blue-700 transition-all duration-200 transform-gpu active:scale-95 active:border-b-2 w-full md:w-auto text-center">
-              Register
-            </Link>
+            <Link to="/checkout" className="mt-4 inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-3 rounded-lg font-semibold shadow-md hover:from-blue-600 hover:to-purple-600 transition text-center">Register / Book Now</Link>
           </div>
         </div>
-      </div>
-
-      {/* Related Events Section */}
-      {relatedEvents.length > 0 && (
+        {/* Related Events */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-blue-700 mb-4">Related Events</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relatedEvents.map(e => (
-              <EventCard key={e.id} event={e} />
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Related Events</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {related.map(e => (
+              <Link to={`/events/${e.id}`} key={e.id} className="flex items-center gap-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow p-4 hover:shadow-lg transition">
+                <img src={e.image} alt={e.name} className="w-20 h-20 object-cover rounded-xl" />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-700">{e.name}</h3>
+                  <p className="text-gray-600 text-sm">📅 {e.date} | 📍 {e.location}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
-      )}
-      
-      {/* Comments Section */}
-      <Comments eventId={event.id} />
     </div>
+    </section>
   );
 };
 

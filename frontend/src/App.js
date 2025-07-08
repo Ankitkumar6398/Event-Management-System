@@ -1,54 +1,37 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Events from "./pages/Events";
-import CreateEditEvent from "./pages/CreateEditEvent";
-import Contact from "./pages/Contact";
-import EventDetails from "./pages/EventDetails";
-import Dashboard from "./pages/Dashboard";
-import About from "./pages/About";
+import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import EventRegistration from "./pages/EventRegistration";
-import CalendarView from "./pages/CalendarView";
-import ScrollToTopButton from "./components/ScrollToTopButton";
-import { ThemeProvider } from "./context/ThemeContext";
-import RegistrationsPage from "./pages/RegistrationsPage";
-import MyRegistrations from "./pages/MyRegistrations";
+import UserDashboard from "./pages/UserDashboard";
+import Events from "./pages/Events";
+import EventDetails from "./pages/EventDetails";
+import Checkout from "./pages/Checkout";
 import AdminPanel from "./pages/AdminPanel";
-import AdminRegister from "./pages/AdminRegister";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Profile from "./pages/Profile";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
+import PrivacyAndTerms from "./pages/Privacy";
 
 function App() {
   return (
-    <ThemeProvider>
       <Router>
-        <Navbar />
-        <div className="pt-16 bg-white dark:bg-gray-900 transition-colors duration-300">
           <Routes>
             <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetails />} />
-            <Route path="/create" element={<ProtectedRoute><CreateEditEvent /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/register/:id" element={<ProtectedRoute><EventRegistration /></ProtectedRoute>} />
-            <Route path="/calendar" element={<CalendarView />} />
-            <Route path="/registrations/:id" element={<ProtectedRoute><RegistrationsPage /></ProtectedRoute>} />
-            <Route path="/my-registrations" element={<ProtectedRoute><MyRegistrations /></ProtectedRoute>} />
-            <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
-            <Route path="/admin-register" element={<AdminRegister />} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/faqs" element={<FAQ />} />
+        <Route path="/privacy" element={<PrivacyAndTerms />} />
+        <Route path="*" element={<div className="text-3xl font-bold underline">Welcome to the new setup!</div>} />
           </Routes>
-        </div>
-        <ScrollToTopButton />
       </Router>
-    </ThemeProvider>
   );
 }
 
